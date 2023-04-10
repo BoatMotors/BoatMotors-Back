@@ -32,21 +32,18 @@ class RegisView(GenericAPIView):
         if len(data['passwor']) < 6:
             return Response({"Error": "Parol juda oddiy"})
 
-
-        user =User.objects.create_user(
+        user = User.objects.create_user(
             phone=data['phone'],
             password=data.get('password', ''),
             first_name=data.get('first_name', ''),
-            last_name =data.get('password', ''),
+            last_name=data.get('password', ''),
             region=data.get('region', ''),
         )
-
 
         return Response({
             "Success": "Foydalanuvchi ro`yxatdan o`tdi.",
             "user": user
         })
-
 
 
 class LoginView(GenericAPIView):
@@ -59,8 +56,7 @@ class LoginView(GenericAPIView):
             return Response({
                 "Error": f"{nott} to`ldirilmagan"
             })
-        user =User.objects.filter(email=data['email']).first()
-
+        user = User.objects.filter(email=data['email']).first()
 
         if not user:
             return Response({
@@ -73,12 +69,7 @@ class LoginView(GenericAPIView):
 
         token = Token.objects.get_or_create(user=user)[0]
 
-
         return Response({
-            "Success": "Kirishingiz mumkin"
+            "Success": token.key,
+            "user": user.format()
         })
-
-
-
-
-

@@ -35,6 +35,28 @@ class User(models.Model):
     adres = models.CharField(max_length=128)
     status = models.BooleanField
 
+    data_joined = models.DateTimeField(editable=False, auto_now_add=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    USERNAME_FIELD = "email"
+    objects = ManagerUser()
+    REQUIRED_FIELDS = ['first_name']
+
+
+    def format(self):
+        return {
+            "id": self.id,
+            "phone": self.phone,
+            "username": self.username,
+            "first_name": self.first_name,
+            "last_name": self.first_name,
+            "is_staff": self.is_staff,
+            "data_joined": self.data_joined,
+            "is_active": self.is_active,
+            "is_superuser": self.is_superuser,
+        }
+
     def __str__(self):
         return self.first_name
 
