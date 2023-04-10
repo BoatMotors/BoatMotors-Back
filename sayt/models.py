@@ -2,25 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-
-
-class User(models.Model):
-    last_name = models.CharField(max_length=128)
-    first_name = models.CharField(max_length=128)
-    phone = models.CharField(max_length=12, unique=True)
-    email = models.CharField(max_length=128, unique=True)
-    password = models.CharField(128)
-    state = models.CharField(max_length=50)
-    region = models.CharField(max_length=128)
-    city = models.CharField(max_length=128)
-    adres = models.CharField(max_length=128)
-    status = models.BooleanField
-
-    def __str__(self):
-        return self.first_name
-
-
-class ctg(models.Model):
+class Category(models.Model):
     name_uz = models.CharField(max_length=128)
     name_ru = models.CharField(max_length=128)
     img = models.ImageField
@@ -31,7 +13,7 @@ class ctg(models.Model):
 
 
 
-class sub_ctg(models.Model):
+class Sub_ctg(models.Model):
     name_uz = models.CharField(max_length=128)
     name_ru = models.CharField(max_length=128)
 
@@ -39,7 +21,7 @@ class sub_ctg(models.Model):
         return self.name_uz
 
 
-class product(models.Model):
+class Product(models.Model):
     name_uz = models.CharField(max_length=128)
     name_ru = models.CharField(max_length=128)
     img = models.ImageField
@@ -53,9 +35,11 @@ class product(models.Model):
 
 
 
-class basket(models.Model):
+class Basket(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     quantity = models.IntegerField()
-    ptice = models.CharField(max_length=256)
+    price = models.CharField(max_length=256)
 
 
 
