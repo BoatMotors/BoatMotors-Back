@@ -68,9 +68,6 @@ class LoginView(GenericAPIView):
 
 
 
-
-
-
         if nott:
             return Response({
                 "Error": f"{nott} to`ldirilmagan"
