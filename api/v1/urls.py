@@ -2,6 +2,7 @@ from django.urls import path
 
 from api.v1.auth.views import RegisView
 from api.v1.category.views import CategoryView
+from api.v1.product.views import ProductView
 from api.v1.subctg.views import SubCtgView
 from api.v1.basket.views import BasketView
 
