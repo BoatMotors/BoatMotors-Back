@@ -9,7 +9,7 @@ class CategoryView(GenericAPIView):
     def get(self, requests, pk=None, *args, **kwargs):
         category = ''
         if pk:
-            category = categoryFormat(Category.objects.filter(pk=pk).filter())
+            category = categoryFormat(Category.objects.filter(pk=pk).first())
         if pk is None:
             l = Category.objects.all()
             category = []

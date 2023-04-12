@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 
 def categoryFormat(data):
-    print(data,'hhhhhhhhhhhhhhhhhhhhhhhhh')
+
 
     return OrderedDict({
         "name_uz": data.name_uz,
@@ -14,3 +14,9 @@ def categoryFormat(data):
 
     })
 
+def subctgFormat(data):
+
+    return OrderedDict({
+        "name_uz":data.name_uz,
+        "name_ru":data.name_ru,
+    })

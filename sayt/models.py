@@ -7,7 +7,7 @@ from register.models import User
 class Category(models.Model):
     name_uz = models.CharField(max_length=128)
     name_ru = models.CharField(max_length=128)
-    img = models.ImageField
+    img = models.ImageField()
     slug = models.CharField(max_length=128)
 
     def __str__(self):
@@ -27,7 +27,7 @@ class Product(models.Model):
     sub_ctg = models.ForeignKey(Sub_ctg, on_delete=models.CASCADE)
     name_uz = models.CharField(max_length=128)
     name_ru = models.CharField(max_length=128)
-    img = models.ImageField
+    img = models.ImageField()
     view = models.IntegerField()
     like = models.IntegerField()
     dis_like = models.IntegerField()
