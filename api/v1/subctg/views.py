@@ -14,11 +14,11 @@ class SubCtgView(GenericAPIView):
             subctg = subctgFormat(Sub_ctg.objects.filter(pk=pk).first())
 
         if pk is None:
-            l= Sub_ctg.objects.all()
+            l = Sub_ctg.objects.all()
             subctg = []
             for i in l:
                 subctg.append(subctgFormat(i))
 
         return Response({
-            "result":subctg
+            "result": subctg
         })

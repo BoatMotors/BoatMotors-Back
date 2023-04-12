@@ -10,7 +10,7 @@ class RegisView(GenericAPIView):
     def post(self, requests, *args, **kwargs):
         data = requests.data
 
-        nott = ["first_name", "last_name", "phone", "password"]
+        nott = ["first_name", "last_name", "phone", "password", 'email']
         s = ''
 
         for i in nott:
@@ -29,20 +29,23 @@ class RegisView(GenericAPIView):
         if not data['phone'].isdigit():
             return Response({"Error": "Raqamlarni sonlarda kiritish kerak."})
 
-        if len(data['passwor']) < 6:
+        if len(data['password']) < 6:
             return Response({"Error": "Parol juda oddiy"})
 
         user = User.objects.create_user(
             phone=data['phone'],
+            email=data['email'],
             password=data.get('password', ''),
             first_name=data.get('first_name', ''),
             last_name=data.get('password', ''),
             region=data.get('region', ''),
         )
+        print(user)
+        token = Token.objects.get_or_create(user=user)[0]
+
 
         return Response({
-            "Success": "Foydalanuvchi ro`yxatdan o`tdi.",
-            "user": user
+            "Success": token.key,
         })
 
 
