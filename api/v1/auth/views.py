@@ -2,7 +2,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
-from sayt.models import User
+from register.models import User
 
 
 class RegisView(GenericAPIView):
@@ -52,6 +52,25 @@ class LoginView(GenericAPIView):
 
         nott = 'email' if 'email' not in data else 'password' if "password" not in data else None
 
+        if  data is None:
+            return Response({
+                "error": "data to'ldirilmagan"
+            })
+
+        if 'email' not in data:
+            return Response({
+                "error": "email yo'q"
+            })
+        if 'password' not in data:
+            return Response({
+                "error": "password yo'q"
+            })
+
+
+
+
+
+
         if nott:
             return Response({
                 "Error": f"{nott} to`ldirilmagan"
@@ -73,3 +92,5 @@ class LoginView(GenericAPIView):
             "Success": token.key,
             "user": user.format()
         })
+
+

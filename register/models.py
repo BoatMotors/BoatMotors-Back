@@ -28,7 +28,7 @@ class User(models.Model):
     first_name = models.CharField(max_length=128)
     phone = models.CharField(max_length=12, unique=True)
     email = models.CharField(max_length=128, unique=True)
-    password = models.CharField(128)
+    password = models.CharField(max_length=128)
     state = models.CharField(max_length=50)
     region = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
