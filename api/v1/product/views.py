@@ -52,8 +52,13 @@ class ProductView(GenericAPIView):
         elif pk:
             product = Product.objects.filter(pk=pk).first()
 
+            if not product:
+                return Response({
+                    "Error": "Bunaqa id li product topilmadi"
+                })
+
             return Response({
-                "result": product
+                "result": productFormat(product)
             })
         else:
             return Response({

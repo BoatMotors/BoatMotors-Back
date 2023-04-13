@@ -15,8 +15,6 @@ class BasketView(GenericAPIView):
     def post(self, requests, *args, **kwargs):
         data = requests.data
 
-
-
         if not User:
             return Response({
                 "Error": "Siz ro`yxatdan o`tmagansiz"
@@ -32,5 +30,6 @@ class BasketView(GenericAPIView):
         product = Product.objects.filter(pk="pro_id")
 
 
-        return Response("natija")
-
+        return Response({
+            "Result": product
+        })

@@ -1,8 +1,12 @@
+import random
+
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
 from register.models import User
+from sayt.base.helper import code_decoder
+from sayt.models import OTP
 
 
 class RegisView(GenericAPIView):
@@ -40,9 +44,8 @@ class RegisView(GenericAPIView):
             last_name=data.get('password', ''),
             region=data.get('region', ''),
         )
-        print(user)
-        token = Token.objects.get_or_create(user=user)[0]
 
+        token = Token.objects.get_or_create(user=user)[0]
 
         return Response({
             "Success": token.key,
@@ -53,24 +56,20 @@ class LoginView(GenericAPIView):
     def post(self, requests, *args, **kwargs):
         data = requests.data
 
-        nott = 'email' if 'email' not in data else 'password' if "password" not in data else None
-
-        if  data is None:
+        if data is None:
             return Response({
                 "error": "data to'ldirilmagan"
             })
 
-        if 'email' not in data:
-            return Response({
-                "error": "email yo'q"
-            })
-        if 'password' not in data:
-            return Response({
-                "error": "password yo'q"
-            })
-
-
-
+        # if 'email' not in data:
+        #     return Response({
+        #         "error": "email yo'q"
+        #     })
+        # if 'password' not in data:
+        #     return Response({
+        #         "error": "password yo'q"
+        #     })
+        nott = 'email' if 'email' not in data else 'password' if "password" not in data else None
         if nott:
             return Response({
                 "Error": f"{nott} to`ldirilmagan"
@@ -94,3 +93,26 @@ class LoginView(GenericAPIView):
         })
 
 
+class StepOne(GenericAPIView):
+
+    def post(self, requests, ):
+        data = requests.data
+
+        if "email" not in data:
+            return Response({
+                "Error": "Email kiritilmagan"
+            })
+
+        code = random.randint(100000, 999999)
+        shifr = code_decoder(code)
+        otp_token = OTP.objects.create(
+            key=shifr,
+            email=data["email"],
+            state="step-one",
+
+        )
+
+        return Response({
+            "code": code,
+            "otp_ token": otp_token.key,
+        })

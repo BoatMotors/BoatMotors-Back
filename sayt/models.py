@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 # Create your models here.
@@ -49,3 +51,24 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     text = models.TextField(max_length=256)
+    date_added = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.user
+
+
+class OTP(models.Model):
+    key = models.CharField(max_length=1024, unique=True)
+    email = models.CharField(max_length=128, unique=True)
+    is_expired = models.BooleanField(default=False)
+    tries = models.SmallIntegerField(default=0)
+    state = models.CharField(max_length=128)
+    is_confirmed = models.BooleanField(default=False)
+    create_at = models.DateTimeField(auto_now=False, auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+
+    def save(self, *args, **kwargs):
+        if self.tries >= 5:
+            self.is_expired = True
+
+        return super(OTP, self).save(*args, **kwargs)
