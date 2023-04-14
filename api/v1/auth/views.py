@@ -135,7 +135,7 @@ class StepTwo(GenericAPIView):
 
         if not otp:
             return Response({
-                "Error": "token xato"
+                "Error": "otp xato"
             })
 
         if token not in data:
