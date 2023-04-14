@@ -1,4 +1,6 @@
+import datetime
 import random
+import token
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -114,5 +116,50 @@ class StepOne(GenericAPIView):
 
         return Response({
             "code": code,
-            "otp_ token": otp_token.key,
+            "otp_token": otp_token.key,
         })
+
+
+
+
+class StepTwo(GenericAPIView):
+    def post(self, requests, *args, **kwargs):
+        data = requests.data
+
+        if "email" not in data or "key" not in data:
+            return Response({
+                "Error": "email yoki parol xato kiritilgan !"
+            })
+
+        otp = OTP.objects.filter(key=data['otp_token']).first()
+
+        if not otp:
+            return Response({
+                "Error": "token xato"
+            })
+
+        if token not in data:
+            return Response({
+                "Error": "token xato kiritilgan"
+            })
+
+        if otp.is_expired:
+            return Response({
+                "Error": "Otp eskirgan"
+            })
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+
+        if (now-otp.create_at).total_seconds() >= 120:
+            otp.is_expired = True
+            otp.save()
+            return Response({
+                "Error": "Otp eskirgan ya`ni sizga berilgan 2 daqiqa tugagan"
+            })
+
+
+
+
+
+
+
