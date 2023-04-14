@@ -128,7 +128,7 @@ class StepTwo(GenericAPIView):
 
         if "email" not in data or "key" not in data:
             return Response({
-                "Error": "email yoki parol xato kiritilgan !"
+                "Error": "Email va parol kiritilmagan"
             })
 
         otp = OTP.objects.filter(key=data['otp_token']).first()
@@ -156,6 +156,9 @@ class StepTwo(GenericAPIView):
             return Response({
                 "Error": "Otp eskirgan ya`ni sizga berilgan 2 daqiqa tugagan"
             })
+
+
+
 
 
 
