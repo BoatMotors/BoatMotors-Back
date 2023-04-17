@@ -1,5 +1,6 @@
 import datetime
 import random
+import uuid
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -48,8 +49,10 @@ class RegisView(GenericAPIView):
 
         token = Token.objects.get_or_create(user=user)[0]
 
+
         return Response({
             "Success": token.key,
+
         })
 
 
@@ -104,8 +107,11 @@ class StepOne(GenericAPIView):
                 "Error": "Email kiritilmagan"
             })
 
-        code = random.randint(100000, 999999)
-        shifr = code_decoder(code)
+
+        parol = random.randint(100000, 999999)
+        tokenn = uuid.uuid4().__str__() + str(parol) + uuid.uuid4().__str__()
+
+        shifr = code_decoder(tokenn)
         otp_token = OTP.objects.create(
             key=shifr,
             email=data["email"],
@@ -114,8 +120,10 @@ class StepOne(GenericAPIView):
         )
 
         return Response({
-            "code": code,
+            "parol": parol,
+            "tokenn": tokenn,
             "otp_token": otp_token.key,
+
         })
 
 
@@ -153,5 +161,13 @@ class StepTwo(GenericAPIView):
             otp.save()
             return Response({
                 "Error": "Otp eskirgan ya`ni sizga berilgan 2 daqiqa tugagan"
+            })
+
+        shifr = code_decoder()
+
+        if shifr != "token":
+            otp.tries + 1
+            return Response({
+                "Error": "3 marta berilgan imkoniyatdan foydalanolmadingiz"
             })
 
