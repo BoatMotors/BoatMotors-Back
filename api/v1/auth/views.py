@@ -1,5 +1,6 @@
 import datetime
 import random
+import uuid
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
@@ -50,6 +51,7 @@ class RegisView(GenericAPIView):
 
         return Response({
             "Success": token.key,
+
         })
 
 
@@ -96,8 +98,10 @@ class StepOne(GenericAPIView):
                 "Error": "Email kiritilmagan"
             })
 
-        code = random.randint(100000, 999999)
-        shifr = code_decoder(code)
+        parol = random.randint(100000, 999999)
+        tokenn = uuid.uuid4().__str__() + str(parol) + uuid.uuid4().__str__()
+
+        shifr = code_decoder(tokenn)
         otp_token = OTP.objects.create(
             key=shifr,
             email=data["email"],
@@ -106,8 +110,10 @@ class StepOne(GenericAPIView):
         )
 
         return Response({
-            "code": code,
+            "parol": parol,
+            "tokenn": tokenn,
             "otp_token": otp_token.key,
+
         })
 
 
@@ -127,7 +133,6 @@ class StepTwo(GenericAPIView):
 
         otp = OTP.objects.filter(key=data['token']).first()
 
-
         if not otp:
             return Response({
                 "Error": "Bunaqa token mavjud emas"
@@ -138,11 +143,8 @@ class StepTwo(GenericAPIView):
                 "Error": "Otp eskirgan"
             })
 
-
-
         now = datetime.datetime.now(datetime.timezone.utc)
         cr = otp.create_at
-
 
         if (now - cr).total_seconds() >= 120:
             otp.is_expired = True
@@ -159,4 +161,3 @@ class StepTwo(GenericAPIView):
         return Response({
             "Success": "User yaratildi"
         })
-
