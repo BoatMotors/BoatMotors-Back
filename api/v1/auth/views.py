@@ -24,15 +24,15 @@ class RegisView(GenericAPIView):
 
         if s:
             return Response({
-                "Error": f" datada {s} polyalar to`ldirilmagan"
+                "Error": f" Datada {s}  to`ldirilmagan"
 
             })
 
         if len(data['phone']) != 12:
-            return Response({"Error": "Telefon raqam + olib tashlaganda 12 tadan iborat bo`lishi kerak !"})
+            return Response({"Error": "Telefon raqam  12 tadan iborat bo`lishi kerak !"})
 
         if not data['phone'].isdigit():
-            return Response({"Error": "Raqamlarni sonlarda kiritish kerak."})
+            return Response({"Error": "Raqamlarni sonlarda kiriting"})
 
         if len(data['password']) < 6:
             return Response({"Error": "Parol juda oddiy"})
@@ -62,14 +62,6 @@ class LoginView(GenericAPIView):
                 "error": "data to'ldirilmagan"
             })
 
-        # if 'email' not in data:
-        #     return Response({
-        #         "error": "email yo'q"
-        #     })
-        # if 'password' not in data:
-        #     return Response({
-        #         "error": "password yo'q"
-        #     })
         nott = 'email' if 'email' not in data else 'password' if "password" not in data else None
         if nott:
             return Response({
@@ -138,7 +130,7 @@ class StepTwo(GenericAPIView):
 
         if not otp:
             return Response({
-                "Error": "bunaqa token mavjud emas"
+                "Error": "Bunaqa token mavjud emas"
             })
 
         if otp.is_expired:
@@ -146,12 +138,25 @@ class StepTwo(GenericAPIView):
                 "Error": "Otp eskirgan"
             })
 
-        now = datetime.datetime.now(datetime.timezone.utc)
 
-        if (now - otp.create_at).total_seconds() >= 120:
+
+        now = datetime.datetime.now(datetime.timezone.utc)
+        cr = otp.create_at
+
+
+        if (now - cr).total_seconds() >= 120:
             otp.is_expired = True
             otp.save()
             return Response({
-                "Error": "Otp eskirgan ya`ni sizga berilgan 2 daqiqa tugagan"
+                "Error": "Yuborilgan raqam 2 daqiqa ichida kiritilishi kerak"
             })
+
+        if otp.key[-6:] != str(data['code']):
+            return Response({
+                "Error": "Xato raqam kiritildi"
+            })
+
+        return Response({
+            "Success": "User yaratildi"
+        })
 
