@@ -29,3 +29,10 @@ def productFormat(data):
         "dis_like": data.dis_like,
         "price": data.price,
     })
+
+def basketFormat(data):
+    return OrderedDict({
+        "product":data.product.name_uz,
+        "quantity":data.quantity,
+        "price":data.price,
+    })

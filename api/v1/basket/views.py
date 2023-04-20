@@ -5,31 +5,39 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from register.models import User
-from sayt.models import Product
+from sayt.base.format import basketFormat
+from sayt.models import Product, Basket
 
 
 class BasketView(GenericAPIView):
-    permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)         # ikkalasi userni ro'yhatdan o'tganligini tekshiradi
 
     def post(self, requests, *args, **kwargs):
+
         data = requests.data
 
-        if not User:
+        if "prod_id" not in data:
             return Response({
-                "Error": "Siz ro`yxatdan o`tmagansiz"
+                "Error": "Product id kiritilmagan"
             })
 
+        prod = Product.objects.filter(pk=data['prod_id']).first()
 
+        if prod:
+            baskett = Basket.objects.get_or_create(
+                user=requests.user,
+                product=prod,
+            )[0]
 
-        if 'pro_id' not in data:
+            baskett.quantity = data.get('quantity', baskett.quantity)  # data.get('quantity', 1)
+            baskett.save()
+
             return Response({
-                "Error": "id topilmadi"
+                "result":basketFormat(baskett)
             })
 
-        product = Product.objects.filter(pk="pro_id")
-
-
-        return Response({
-            "Result": product
-        })
+        else:
+            return Response({
+                "Error":"Bunday mahsulot topilmadi"
+            })

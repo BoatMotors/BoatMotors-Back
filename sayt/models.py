@@ -30,10 +30,10 @@ class Product(models.Model):
     name_uz = models.CharField(max_length=128)
     name_ru = models.CharField(max_length=128)
     img = models.ImageField()
-    view = models.IntegerField()
-    like = models.IntegerField()
-    dis_like = models.IntegerField()
-    price = models.CharField(max_length=128)
+    view = models.IntegerField(default=0)
+    like = models.IntegerField(default=0)
+    dis_like = models.IntegerField(default=0)
+    price = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name_uz
@@ -42,9 +42,18 @@ class Product(models.Model):
 class Basket(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    price = models.CharField(max_length=256)
+    quantity = models.IntegerField(default=1)
+    price = models.IntegerField(default=0)
     create_date = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.price = int(self.product.price)  * int(self.quantity)
+        return super(Basket, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.price
+
+
 
 
 class Comment(models.Model):
@@ -72,3 +81,8 @@ class OTP(models.Model):
             self.is_expired = True
 
         return super(OTP, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.OTP.key
+
+
