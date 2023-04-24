@@ -1,6 +1,6 @@
 from django.urls import path
 
-from api.v1.auth.views import RegisView, StepOne, StepTwo, LoginView
+from api.v1.auth.views import RegisView, StepOne, StepTwo, LoginView, ChangePass
 from api.v1.category.views import CategoryView
 from api.v1.product.views import ProductView
 from api.v1.subctg.views import SubCtgView
@@ -29,5 +29,6 @@ urlpatterns = [
         path('stepone/', StepOne.as_view()),
         path('steptwo/', StepTwo.as_view()),
         path('basket/', BasketView.as_view()),
+        path('change/', ChangePass.as_view())
 
 ]

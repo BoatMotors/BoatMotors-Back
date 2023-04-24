@@ -3,7 +3,9 @@ import random
 import uuid
 
 from django.conf import settings
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
@@ -94,6 +96,7 @@ class LoginView(GenericAPIView):
 
 class StepOne(GenericAPIView):
 
+
     def post(self, requests, ):
         data = requests.data
 
@@ -171,6 +174,39 @@ class StepTwo(GenericAPIView):
         return Response({
             "Success": "User yaratildi"
         })
+
+
+class ChangePass(GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)  # ikkalasi userni ro'yhatdan o'tganligini tekshiradi
+
+    def post(self, requests, *args, **kwargs):
+        user = requests.user
+        data = requests.data
+
+        if "old" not in data:
+            return Response({
+                "Error": "eski parol kiritlmagan"
+            })
+
+        if not user.check_password(data['old']):
+            return Response({
+                "Error": "eski parol noto`g`ri kiritlgan"
+            })
+
+        if "new" not in data:
+            return Response({
+                "Error": "yangi qoymoqchi bo`lingan parol kiritilmagan"
+            })
+
+
+        user.set_password(data['new'])
+        user.save()
+
+        return Response({
+            "Success": "parol o`zgartirildi"
+        })
+
 
 
 
