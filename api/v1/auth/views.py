@@ -2,6 +2,7 @@ import datetime
 import random
 import uuid
 
+from django.conf import settings
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -9,6 +10,9 @@ from rest_framework.authtoken.models import Token
 from register.models import User
 from sayt.base.helper import code_decoder
 from sayt.models import OTP
+
+from django.core.mail import send_mail
+from django.http import HttpResponse
 
 
 class RegisView(GenericAPIView):
@@ -99,6 +103,12 @@ class StepOne(GenericAPIView):
             })
 
         parol = random.randint(100000, 999999)
+        try:
+            res = send_mail("Hacker", f"Maxfiy kalit: {parol}", settings.EMAIL_HOST_USER, [data['email']])
+        except Exception as e:
+            return Response({
+                "Error": e.__str__()
+            })
         tokenn = uuid.uuid4().__str__() + str(parol) + uuid.uuid4().__str__()
 
         shifr = code_decoder(tokenn)
@@ -161,3 +171,9 @@ class StepTwo(GenericAPIView):
         return Response({
             "Success": "User yaratildi"
         })
+
+
+
+
+
+
