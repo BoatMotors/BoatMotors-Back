@@ -10,16 +10,15 @@ from sayt.models import Product, Basket
 
 
 class BasketView(GenericAPIView):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)         # ikkalasi userni ro'yhatdan o'tganligini tekshiradi
+    authentication_classes = TokenAuthentication,
+    permission_classes = IsAuthenticated,
 
     def post(self, requests, *args, **kwargs):
-
         data = requests.data
 
         if "prod_id" not in data:
             return Response({
-                "Error": "Product id kiritilmagan"
+                "Error": "Prod id berilmagan"
             })
 
         prod = Product.objects.filter(pk=data['prod_id']).first()
@@ -30,14 +29,14 @@ class BasketView(GenericAPIView):
                 product=prod,
             )[0]
 
-            baskett.quantity = data.get('quantity', baskett.quantity)  # data.get('quantity', 1)
+            baskett.quantity = data.get('quantity', baskett.quantity)
             baskett.save()
 
             return Response({
-                "result":basketFormat(baskett)
+                "result": basketFormat(baskett)
             })
 
         else:
             return Response({
-                "Error":"Bunday mahsulot topilmadi"
+                "Error": "Noto'gri prod berilgan"
             })
