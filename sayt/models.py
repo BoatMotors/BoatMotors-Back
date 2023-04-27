@@ -47,13 +47,11 @@ class Basket(models.Model):
     create_date = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        self.price = int(self.product.price)  * int(self.quantity)
+        self.price = int(self.product.price) * int(self.quantity)
         return super(Basket, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.price
-
-
 
 
 class Comment(models.Model):
@@ -86,3 +84,26 @@ class OTP(models.Model):
         return self.OTP.key
 
 
+class Likes(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    like = models.BooleanField(default=False)
+    dislike = models.BooleanField(default=False)
+
+    def res(self):
+        return {
+            "product_id": self.product.id,
+            "user": self.user.id,
+            "like": self.like,
+            "dislike": self.dislike,
+
+        }
+
+    # def save(self, *args, **kwargs):
+    # if 'like' in kwargs and kwargs['like']:  # anddan o'ng taraf true mi degan ma'noni bildiradi
+    #     self.like = kwargs['like']
+    #
+    # elif 'dislike' in kwargs and kwargs['dislike']:
+    #
+    #
+    # return super(Likes, self).save(*args, **kwargs)

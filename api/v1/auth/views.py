@@ -207,6 +207,8 @@ class ChangePass(GenericAPIView):
             "Success": "parol o`zgartirildi"
         })
 
+# like -> product->comment->post
+
 
 
 
