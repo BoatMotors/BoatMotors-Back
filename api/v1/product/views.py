@@ -64,3 +64,6 @@ class ProductView(GenericAPIView):
             return Response({
                 "Error": "Kerakli malumotlar berilmadi"
             })
+
+
+
