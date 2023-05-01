@@ -49,7 +49,7 @@ class RegisView(GenericAPIView):
             email=data['email'],
             password=data.get('password', ''),
             first_name=data.get('first_name', ''),
-            last_name=data.get('password', ''),
+            last_name=data.get('last_name', ''),
             region=data.get('region', ''),
         )
 
@@ -62,7 +62,7 @@ class RegisView(GenericAPIView):
 
 
 class LoginView(GenericAPIView):
-    def post(self, requests, *args, **kwargs):
+    def post(self,  requests, *args, **kwargs):
         data = requests.data
 
         if data is None:
