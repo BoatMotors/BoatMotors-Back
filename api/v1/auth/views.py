@@ -106,12 +106,12 @@ class StepOne(GenericAPIView):
             })
 
         parol = random.randint(100000, 999999)
-        try:
-            res = send_mail("Hacker", f"Maxfiy kalit: {parol}", settings.EMAIL_HOST_USER, [data['email']])
-        except Exception as e:
-            return Response({
-                "Error": e.__str__()
-            })
+        # try:
+        #     res = send_mail("Hacker", f"Maxfiy kalit: {parol}", settings.EMAIL_HOST_USER, [data['email']])
+        # except Exception as e:
+        #     return Response({
+        #         "Error": e.__str__()
+        #     })
         tokenn = uuid.uuid4().__str__() + str(parol) + uuid.uuid4().__str__()
 
         shifr = code_decoder(tokenn)
@@ -124,7 +124,7 @@ class StepOne(GenericAPIView):
 
         return Response({
             "parol": parol,
-            "tokenn": tokenn,
+            # "tokenn": tokenn,
             "otp_token": otp_token.key,
 
         })

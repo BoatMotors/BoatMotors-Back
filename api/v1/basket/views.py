@@ -40,3 +40,26 @@ class BasketView(GenericAPIView):
             return Response({
                 "Error": "Noto'gri prod berilgan"
             })
+    # def get(self,request, *args, **kwargs):
+    #     print('bu requests', request)
+    #     print(request.user.id)
+    #     # data = request.query_params
+    #     # print('bu data',data)
+    #     # user = data['Authorization']
+    #     # print('bu user',user)
+    #     # print(user.id)
+    #     l = []
+    #     try:
+    #
+    #         for i in Basket.objects.filter(user_id=user):
+    #             l.append(basketFormat(i))
+    #     except:
+    #         l='Bu user da maxsulot yo\'q'
+    #
+    #     return Response({'data':l})
+    #     # print(user)
+    #     # if pk:
+    #     #     basket = Basket.objects.filter(pk=pk, user_id=user).first()
+    #     #     return Response({"data": basketFormat(basket)})
+    #
+    #
