@@ -2,15 +2,21 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 
 # ctg bn, sub_ctg, product bn
-from sayt.base.format import productFormat, subctgFormat
+from register.models import User
+from sayt.base.format import productFormat, subctgFormat, commentFormat
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from sayt.models import Sub_ctg, Category, Product, Likes
+from sayt.models import Sub_ctg, Category, Product, Likes, Comment
 
 
 class ProductView(GenericAPIView):
 
     def get(self, requests, sub=None, ctg=None, pk=None, *args, **kwargs):
+        prod = Product.objects.all()
+        l = []
+        for i in prod:
+            l.append(productFormat(i))
+
 
         if ctg:
             ctg_one = Category.objects.filter(pk=ctg).first()
@@ -63,8 +69,10 @@ class ProductView(GenericAPIView):
                 "result": productFormat(product)
             })
         else:
+
+
             return Response({
-                "Error": "Kerakli malumotlar berilmadi"
+                "result": l
             })
 
 
@@ -139,4 +147,36 @@ class LikeDis(GenericAPIView):
 
         })
 
+
+class Commentview(GenericAPIView):
+    authentication_classes = TokenAuthentication,
+    permission_classes = IsAuthenticated,
+
+    def post(self, requests, *args, **kwargs):
+        data = requests.data
+
+        if "prod_id" not in data or 'comment' not in data:
+            return Response({"Error:Product/Comment id berilmagan"})
+
+        prod = Product.objects.filter(pk=data.get("prod_id")).first()
+
+        if not prod:
+            return Response({"Error": "Bunaqa id bn product topilmadi"})
+
+        root = Comment.objects.create(user=requests.user, product=prod, text=data['comment'])
+        root.save()
+        return Response({"Success":"Kommentariya qo'shildi"})
+
+    def get(self, requests, pk=None, *args, **kwargs):
+        prod_id = Product.objects.filter(pk=pk).first()
+
+        if not prod_id:
+            return Response({"Error":"Bunaqa id li product topilmadi"})
+
+        root = Comment.objects.filter(product=prod_id)
+        l=[]
+        for i in root:
+            l.append(commentFormat(i))
+
+        return Response({"Result": l})
 

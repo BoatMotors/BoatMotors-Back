@@ -99,11 +99,3 @@ class Likes(models.Model):
 
         }
 
-    # def save(self, *args, **kwargs):
-    # if 'like' in kwargs and kwargs['like']:  # anddan o'ng taraf true mi degan ma'noni bildiradi
-    #     self.like = kwargs['like']
-    #
-    # elif 'dislike' in kwargs and kwargs['dislike']:
-    #
-    #
-    # return super(Likes, self).save(*args, **kwargs)

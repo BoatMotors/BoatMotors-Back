@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
 from register.models import User
-from sayt.base.helper import code_decoder
+# from sayt.base.helper import code_decoder
 from sayt.models import OTP
 
 from django.core.mail import send_mail
@@ -112,11 +112,12 @@ class StepOne(GenericAPIView):
         #     return Response({
         #         "Error": e.__str__()
         #     })
-        tokenn = uuid.uuid4().__str__() + str(parol) + uuid.uuid4().__str__()
 
-        shifr = code_decoder(tokenn)
+        tokenn = uuid.uuid4().str() + uuid.uuid4().str() + str(parol)
+
+        # shifr = code_decoder(tokenn)
         otp_token = OTP.objects.create(
-            key=shifr,
+            key=tokenn,
             email=data["email"],
             state="step-one",
 
@@ -171,9 +172,11 @@ class StepTwo(GenericAPIView):
                 "Error": "Xato raqam kiritildi"
             })
 
+        user = User.objects.filter(email=otp.email).first()
         return Response({
-            "Success": "User yaratildi"
+            "is_register": user is not None
         })
+
 
 
 class ChangePass(GenericAPIView):
