@@ -5,7 +5,6 @@ def categoryFormat(data):
     return OrderedDict({
         "name_uz": data.name_uz,
         "name_ru": data.name_ru,
-        "img": data.img.url,
         "slug": data.slug,
 
     })
@@ -23,7 +22,6 @@ def productFormat(data):
         "sub_ctg": data.sub_ctg_id,
         "name_uz": data.name_uz,
         "name_ru": data.name_ru,
-        "img": data.img.url,
         "view": data.view,
         "like": data.like,
         "dis_like": data.dis_like,
@@ -35,4 +33,10 @@ def basketFormat(data):
         "product":data.product.name_uz,
         "quantity":data.quantity,
         "price":data.price,
+    })
+
+def commentFormat(data):
+    return OrderedDict({
+        "user": data.user.format(),
+        "text":data.text,
     })

@@ -19,3 +19,4 @@ class CategoryView(GenericAPIView):
         return Response({
             "result": category
         })
+

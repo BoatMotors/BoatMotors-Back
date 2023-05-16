@@ -5,6 +5,7 @@ from sayt.base.format import subctgFormat
 from sayt.models import Sub_ctg
 
 
+
 class SubCtgView(GenericAPIView):
 
     def get(self, requests, pk=None, *args, **kwargs):
