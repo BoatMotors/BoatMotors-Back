@@ -9,7 +9,7 @@ from register.models import User
 class Category(models.Model):
     name_uz = models.CharField(max_length=128)
     name_ru = models.CharField(max_length=128)
-    img = models.ImageField()
+
     slug = models.CharField(max_length=128)
 
     def __str__(self):
@@ -29,7 +29,7 @@ class Product(models.Model):
     sub_ctg = models.ForeignKey(Sub_ctg, on_delete=models.CASCADE)
     name_uz = models.CharField(max_length=128)
     name_ru = models.CharField(max_length=128)
-    img = models.ImageField()
+
     view = models.IntegerField(default=0)
     like = models.IntegerField(default=0)
     dis_like = models.IntegerField(default=0)
@@ -98,4 +98,38 @@ class Likes(models.Model):
             "dislike": self.dislike,
 
         }
+
+
+
+
+class Delivery(models.Model):
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
+    phone = models.CharField(max_length=12)
+    email = models.CharField(max_length=128)
+    signed_up = models.BooleanField("Royxatdan otganmi:", default=False)
+    agreement = models.BooleanField(default=False)
+
+
+class Location(models.Model):
+    country = models.CharField(max_length=128)
+    region = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+    location = models.CharField(max_length=128)
+
+
+class delivery_types(models.Model):
+    from_magazine = models.BooleanField()
+    from_deliver = models.BooleanField()
+    from_comp = models.BooleanField()
+
+class payment_type(models.Model):
+    cash = models.BooleanField()
+    card = models.BooleanField()
+    bank_doc = models.BooleanField()
+    kredit = models.BooleanField()
+    payment_comp = models.BooleanField()
+
+
+
 

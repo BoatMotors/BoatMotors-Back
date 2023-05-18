@@ -2,6 +2,7 @@ from django.urls import path
 
 from api.v1.auth.views import RegisView, StepOne, StepTwo, LoginView, ChangePass
 from api.v1.category.views import CategoryView
+from api.v1.delivery.views import Saler
 from api.v1.product.views import ProductView, LikeDislike, LikeDis, Commentview
 from api.v1.subctg.views import SubCtgView
 from api.v1.basket.views import BasketView
@@ -34,5 +35,7 @@ urlpatterns = [
         path('change/', ChangePass.as_view()),
         path('comment/', Commentview.as_view()),
         path('comment/<int:pk>/', Commentview.as_view()),
+
+        path('saler/', Saler.as_view())
 
 ]
